@@ -336,54 +336,6 @@ void InitGL(HWND hWndGL)
 
 
     GLenum x = glewInit();
-
-#if 0
-    // Register the shared DX texture with OGL
-    if (WGLEW_NV_DX_interop)
-    {
-        // Acquire a handle to the D3D device for use in OGL
-        g_hDX9Device = wglDXOpenDeviceNV(g_pDevice);
-
-        if (g_hDX9Device)
-        {
-            glGenTextures(1, &g_GLTexture);
-
-#if SHARE_TEXTURE
-            // This registers a resource that was created as shared in DX with its shared handle
-            bool success = wglDXSetResourceShareHandleNV(g_pSharedTexture, g_hSharedTexture);
-
-            // g_hGLSharedTexture is the shared texture data, now identified by the g_GLTexture name
-            g_hGLSharedTexture = wglDXRegisterObjectNV(g_hDX9Device,
-                g_pSharedTexture,
-                g_GLTexture,
-                GL_TEXTURE_2D,
-                WGL_ACCESS_READ_ONLY_NV);
-#else
-            // This registers a resource that was created as shared in DX with its shared handle
-            bool success = wglDXSetResourceShareHandleNV(g_pSharedSurface, g_hSharedSurface);
-
-            // g_hGLSharedTexture is the shared texture data, now identified by the g_GLTexture name
-            g_hGLSharedTexture = wglDXRegisterObjectNV(g_hDX9Device,
-                g_pSharedSurface,
-                g_GLTexture,
-                GL_TEXTURE_2D,
-                WGL_ACCESS_READ_ONLY_NV);
-#endif
-        }
-    }
-
-    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1, 1);
-    glDisable(GL_DEPTH_TEST);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-
-    //    const GLubyte* 
-    auto str = glGetString(GL_VENDOR);
-#endif
 }
 
 
