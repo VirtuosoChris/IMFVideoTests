@@ -171,3 +171,40 @@
 002 UWP SDK Media engine native C++ video playback sample (Windows 8)/C++/x64/Debug/embed/embed.resfiles.intermediate
 002 UWP SDK Media engine native C++ video playback sample (Windows 8)/C++/x64/Debug/embed/embed.resfiles
 *.ipch
+*.exe
+004 DX Offscreen/x64/Debug/Tutorial01.exe.recipe
+004 DX Offscreen/x64/Debug/Tutorial01.ilk
+004 DX Offscreen/x64/Debug/Tutorial01.obj
+004 DX Offscreen/x64/Debug/Tutorial01.pdb
+004 DX Offscreen/x64/Debug/Tutorial01.res
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/CL.command.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/CL.read.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/CL.write.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/link.command.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/link.read.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/link.write.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/rc.command.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/rc.read.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/rc.write.1.tlog
+004 DX Offscreen/x64/Debug/Tutorial01.tlog/Tutorial01.lastbuildstate
+004 DX Offscreen/x64/Debug/Tutorial01_2019.log
+004 DX Offscreen/x64/Debug/Tutorial01_2019.vcxproj.FileListAbsolute.txt
+004 DX Offscreen/x64/Debug/vc143.idb
+004 DX Offscreen/x64/Debug/vc143.pdb
+004 DX Offscreen/x64/Release/Tutorial01.exe.recipe
+004 DX Offscreen/x64/Release/Tutorial01.iobj
+004 DX Offscreen/x64/Release/Tutorial01.ipdb
+004 DX Offscreen/x64/Release/Tutorial01.obj
+004 DX Offscreen/x64/Release/Tutorial01.res
+004 DX Offscreen/x64/Release/Tutorial01.tlog/CL.command.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/CL.read.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/CL.write.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/link.command.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/link.read.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/link.write.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/rc.command.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/rc.read.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/rc.write.1.tlog
+004 DX Offscreen/x64/Release/Tutorial01.tlog/Tutorial01.lastbuildstate
+004 DX Offscreen/x64/Release/Tutorial01_2019.log
+004 DX Offscreen/x64/Release/vc143.pdb
