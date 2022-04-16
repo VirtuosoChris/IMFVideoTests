@@ -1,0 +1,18 @@
+﻿  Tutorial01.cpp
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(166,29): warning C4100: 'param2': unreferenced formal parameter
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(164,33): warning C4100: 'param1': unreferenced formal parameter
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(162,29): warning C4100: 'event': unreferenced formal parameter
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(222,29): warning C4100: 'param2': unreferenced formal parameter
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(220,33): warning C4100: 'param1': unreferenced formal parameter
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(302,34): warning C4189: 'a': local variable is initialized but not referenced
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(366,24): warning C4101: 'success': unreferenced local variable
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\IMFVideo.h(385,22): warning C4189: 'doesex': local variable is initialized but not referenced
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(158,12): warning C4101: 'success': unreferenced local variable
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(130,14): warning C4189: 'hr': local variable is initialized but not referenced
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(307,18): warning C4459: declaration of 'hWndGL' hides global declaration
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(55,25): message : see declaration of 'hWndGL'
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(338,12): warning C4189: 'x': local variable is initialized but not referenced
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(480,10): warning C4189: 'height': local variable is initialized but not referenced
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(479,10): warning C4189: 'width': local variable is initialized but not referenced
+C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Tutorial01.cpp(493,10): warning C4189: 'numDriverTypes': local variable is initialized but not referenced
+  Tutorial01_2019.vcxproj -> C:\Users\chris\GitHub\IMFVideoTests\005 DX GL Interop\Debug\Tutorial01.exe
