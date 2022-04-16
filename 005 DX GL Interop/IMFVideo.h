@@ -388,7 +388,8 @@ namespace Virtuoso
 
             }
 
-
+            // wraps:
+            // https://docs.microsoft.com/en-us/windows/win32/api/mfmediaengine/nn-mfmediaengine-imfmediaengine
             IMFMediaPlayer()
             {
                 // create DX texture
