@@ -243,7 +243,7 @@ namespace Virtuoso
                 pd3dDevice->QueryInterface<ID3D10Multithread>(&spMultithread);
                 spMultithread->SetMultithreadProtected(TRUE);
 
-                //spMultithread->Release();
+                spMultithread->Release();
 
                 UINT resetToken;
                 MFCreateDXGIDeviceManager(&resetToken, &DXGIManager);
@@ -315,7 +315,6 @@ namespace Virtuoso
             // not relevant to video player!
 
             CHECKLN_HRESULT(pMediaEngineClassFactory->CreateInstance(flags, attributes, mediaEngine));
-
 
             (*mediaEngine)->QueryInterface<IMFMediaEngineEx>(mediaEngineEx);
 
