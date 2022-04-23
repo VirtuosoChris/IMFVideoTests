@@ -514,18 +514,8 @@ namespace Virtuoso
 
             void playMedia(const std::string_view& pathIn)
             {
-                const int BUFSIZE = 1024;
-                DWORD  retval = 0;
-                BOOL   success;
-                TCHAR  buffer[BUFSIZE] = TEXT("");
-                TCHAR  buf[BUFSIZE] = TEXT("");
-                TCHAR** lppPart = { NULL };
-
                 BSTR bpath = _com_util::ConvertStringToBSTR(pathIn.data());
-                retval = GetFullPathName(bpath, BUFSIZE, buffer, lppPart);
-
-
-                CHECKLN_HRESULT(mediaEngine->SetSource(buffer));
+                CHECKLN_HRESULT(mediaEngine->SetSource(bpath));
             }
 
             // wraps:
