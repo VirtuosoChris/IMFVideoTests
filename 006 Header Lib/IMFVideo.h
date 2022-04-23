@@ -68,6 +68,79 @@ namespace Virtuoso
             }
         }
 
+        struct GLTexture
+        {
+            GLuint glTex = 0;
+            HANDLE glHandle = 0;
+            GLuint readFBO = 0;
+
+            HANDLE gl_handleD3D = 0;
+
+            void lockForGL()
+            {
+                wglDXLockObjectsNV(gl_handleD3D, 1, &glHandle);
+            }
+
+            void unlockForGL()
+            {
+                wglDXUnlockObjectsNV(gl_handleD3D, 1, &glHandle);
+            }
+
+            void init()
+            {
+                glGenFramebuffers(1, &readFBO);
+                assert(readFBO);
+
+                glGenTextures(1, &glTex);
+                assert(glTex);
+
+                GLint oldFBRead = 0;
+                GLint oldFBDraw = 0;
+
+                glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &oldFBRead);
+                glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &oldFBDraw);
+
+                glBindFramebuffer(GL_FRAMEBUFFER, readFBO);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, glTex, 0);
+
+                // restore prior state so this call doesn't affect any global gl state
+                glBindFramebuffer(GL_READ_FRAMEBUFFER, oldFBRead);
+                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, oldFBDraw);
+            }
+
+            GLTexture()
+            {
+                init();
+            }
+
+            GLTexture(HANDLE gl_handleD3D, ID3D11Texture2D* dxTexture)
+            {
+                init();
+                mapTextureDX(gl_handleD3D, dxTexture);
+            }
+
+            void mapTextureDX(HANDLE gl_handleD3DIn, ID3D11Texture2D* dxTexture)
+            {
+                gl_handleD3D = gl_handleD3DIn;
+                glHandle = wglDXRegisterObjectNV(gl_handleD3D, dxTexture, glTex, GL_TEXTURE_2D, WGL_ACCESS_READ_ONLY_NV);
+                assert(glHandle);
+
+                GLint oldFBRead = 0;
+                GLint oldFBDraw = 0;
+
+                glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &oldFBRead);
+                glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &oldFBDraw);
+
+                glBindFramebuffer(GL_FRAMEBUFFER, readFBO);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, glTex, 0);
+
+                // restore prior state so this call doesn't affect any global gl state
+                glBindFramebuffer(GL_READ_FRAMEBUFFER, oldFBRead);
+                glBindFramebuffer(GL_DRAW_FRAMEBUFFER, oldFBDraw);
+            }
+        };
+
+
         struct DX11Context
         {
             const static DXGI_FORMAT texFormat = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -75,11 +148,11 @@ namespace Virtuoso
             ID3D11Device* pd3dDevice = nullptr;
             ID3D11DeviceContext* pImmediateContext = nullptr;
             IMFDXGIDeviceManager* DXGIManager = nullptr;
-            HANDLE gl_handleD3D;
+            HANDLE gl_handleD3D = 0;
 
             D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
-            ID3D11Texture2D* createTexture(UINT width, UINT height)
+            ID3D11Texture2D* createTextureDX(UINT width, UINT height)
             {
                 ID3D11Texture2D* tex = nullptr;
 
@@ -170,7 +243,7 @@ namespace Virtuoso
                 pd3dDevice->QueryInterface<ID3D10Multithread>(&spMultithread);
                 spMultithread->SetMultithreadProtected(TRUE);
 
-                spMultithread->Release();
+                //spMultithread->Release();
 
                 UINT resetToken;
                 MFCreateDXGIDeviceManager(&resetToken, &DXGIManager);
@@ -195,6 +268,8 @@ namespace Virtuoso
             bool isHWND,
             IMFDXGIDeviceManager* DXGIManager=nullptr)
         {
+            assert(isHWND || DXGIManager);
+
             CHECK_HRESULT(MFStartup(MF_VERSION), "MFStartup error : Media foundation initialization failed");
             CHECK_HRESULT(CoInitializeEx(NULL, COINIT_MULTITHREADED), "CoInitializeEx() error : COM failed to initialize");
 
@@ -314,6 +389,37 @@ namespace Virtuoso
             double durationSeconds;
             double currentTime;
 
+            GLTexture glState;
+            ID3D11Texture2D* tex = nullptr;
+
+            bool updateStep()
+            {
+                return updateStep(tex);
+            }
+
+            bool updateStep(ID3D11Texture2D* tex)
+            {
+                LONGLONG pts;
+                if (mediaEngine->OnVideoStreamTick(&pts) == S_OK)
+                {
+                    ///\todo hack here
+                    if (!glState.glHandle) // <<<< because we have to run on the gl main thread
+                    {
+                        glState.mapTextureDX(gl_handleD3D, tex);
+                    }
+
+                    const MFARGB border = { 0, 0, 0, 255 };
+                    RECT dimensions = CRect(CPoint(0, 0), CSize(width, height)); // was 1080p hxc
+                    MFVideoNormalizedRect srcr = { 0.f,0.f,1.f,1.f };
+
+                    CHECKLN_HRESULT(mediaEngine->TransferVideoFrame(tex, nullptr, &dimensions, &border));
+                    return true;
+                }
+
+                return false;
+            }
+
+
             void queryProperties()
             {
                 mediaEngine->GetNativeVideoSize(&width, &height);
@@ -364,6 +470,8 @@ namespace Virtuoso
                     {
                         queryProperties();
 
+                        tex = createTextureDX(width, height);
+
                         mediaEngine->Play();
                         break;
                     }
@@ -404,28 +512,20 @@ namespace Virtuoso
             }
 #endif
 
-            void playMedia(const std::string_view& path)
+            void playMedia(const std::string_view& pathIn)
             {
-                const int BUFSIZE = path.length()+1;
+                const int BUFSIZE = 1024;
                 DWORD  retval = 0;
                 BOOL   success;
-
-                std::vector<TCHAR> buffer(BUFSIZE);
+                TCHAR  buffer[BUFSIZE] = TEXT("");
+                TCHAR  buf[BUFSIZE] = TEXT("");
                 TCHAR** lppPart = { NULL };
 
-                BSTR bpath = _com_util::ConvertStringToBSTR(path.data());
+                BSTR bpath = _com_util::ConvertStringToBSTR(pathIn.data());
+                retval = GetFullPathName(bpath, BUFSIZE, buffer, lppPart);
 
-                retval = GetFullPathName(bpath, BUFSIZE, buffer.data(), lppPart);
 
-                assert(mediaEngine != nullptr);
-
-                CHECKLN_HRESULT(mediaEngine->SetSource(buffer.data()));
-
-#if _DEBUG
-                assert(file_exists_test(path));
-#endif
-
-                CHECKLN_HRESULT(mediaEngine->Play());
+                CHECKLN_HRESULT(mediaEngine->SetSource(buffer));
             }
 
             // wraps:
